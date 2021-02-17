@@ -41,6 +41,15 @@ class OvhSmsChannel
    * @param  mixed  $notifiable
    * @param Notification $notification
    * @return array|null
+   * @note This method return OVH API payload as response
+   * Exemple :
+   * [
+   *   'ids' => [10001,11001],
+   *   'invalidReceivers' => [+33600000000],
+   *   'totalCreditsRemoved' => 1,
+   *   'validReceivers' => [+33615000090]
+   * ]
+   * @see https://eu.api.ovh.com/console/#/sms/%7BserviceName%7D/jobs#POST
    */
   public function send($notifiable, Notification $notification): ?array
   {
@@ -70,13 +79,13 @@ class OvhSmsChannel
     $content = (object) [
       'charset' => 'UTF-8',
       'class' => 'phoneDisplay',
-      'coding' => '7bit',
+      'coding' => $message->coding,
       'message' => $message->content,
       'noStopClause' => !$message->withStopClause,
-      'priority' => 'medium',
+      'priority' => $message->priority,
       'receivers' => $message->receivers,
-      'senderForResponse' => true,
-      'validityPeriod' => 2880,
+      'senderForResponse' => $message->sendForResponse,
+      'validityPeriod' => $message->validityPeriod,
     ];
     return $this->client->post("/sms/{$this->account}/jobs", $content);
   }
