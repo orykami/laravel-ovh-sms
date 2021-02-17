@@ -11,16 +11,58 @@ use InvalidArgumentException;
 class OvhSmsMessage
 {
   /**
+   * High priority
+   */
+  const PRIORITY_HIGH = 'high';
+
+  /**
+   * Medium priority
+   */
+  const PRIORITY_MEDIUM = 'medium';
+
+  /**
+   * Low priority
+   */
+  const PRIORITY_LOW = 'low';
+
+  /**
+   * Very low priority
+   */
+  const PRIORITY_VERY_LOW = 'veryLow';
+
+  /**
+   * Coding 7 bit
+   */
+  const CODING_7BIT = '7bit';
+
+  /**
+   * Coding 8 bit
+   */
+  const CODING_8BIT = '8bit';
+
+  /**
    * The message content.
    * @var string
    */
   public string $content;
 
   /**
-   * The message sender
+   * The message priority
    * @var string
    */
-  public string $from;
+  public string $priority = self::PRIORITY_MEDIUM;
+
+  /**
+   * The message coding
+   * @var string
+   */
+  public string $coding = self::CODING_7BIT;
+
+  /**
+   * The message validity period
+   * @var int
+   */
+  public int $validityPeriod = 2880;
 
   /**
    * The message receiver
@@ -33,6 +75,12 @@ class OvhSmsMessage
    * @var bool
    */
   public bool $withStopClause = false;
+
+  /**
+   * The message must use short number to allow response ?
+   * @var bool
+   */
+  public bool $sendForResponse = false;
 
   /**
    * Create a new message instance.
@@ -56,13 +104,35 @@ class OvhSmsMessage
   }
 
   /**
-   * Set the message sender.
-   * @param  string $from
+   * Set the message priority.
+   * @param string $priority
    * @return $this
    */
-  public function withFrom(string $from): OvhSmsMessage
+  public function withPriority(string $priority): OvhSmsMessage
   {
-    $this->from = $from;
+    $this->priority = $priority;
+    return $this;
+  }
+
+  /**
+   * Set the message coding.
+   * @param string $coding
+   * @return $this
+   */
+  public function withCoding(string $coding): OvhSmsMessage
+  {
+    $this->coding = $coding;
+    return $this;
+  }
+
+  /**
+   * Set the message validity period.
+   * @param int $validityPeriod
+   * @return $this
+   */
+  public function withValidityPeriod(int $validityPeriod): OvhSmsMessage
+  {
+    $this->validityPeriod = $validityPeriod;
     return $this;
   }
 
@@ -74,6 +144,17 @@ class OvhSmsMessage
   public function withStopClause(bool $stopClause): OvhSmsMessage
   {
     $this->withStopClause = $stopClause;
+    return $this;
+  }
+
+  /**
+   * Set the message send for response.
+   * @param bool $sendForResponse
+   * @return $this
+   */
+  public function withSendForResponse(bool $sendForResponse): OvhSmsMessage
+  {
+    $this->sendForResponse = $sendForResponse;
     return $this;
   }
 
