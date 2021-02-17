@@ -53,14 +53,20 @@ class OvhSmsChannel
     if (!method_exists($notification, 'toOvhSms')) {
       return null;
     }
+    /** @var OvhSmsMessage|string $message */
     $message = $notification->toOvhSms($notifiable);
     if (is_string($message)) {
-      $message = (new OvhSmsMessage($message))->withReceivers($receivers);
+      $message = new OvhSmsMessage($message);
     }
     // Ensure message is an instance of OvhSmsMessage
     if (!$message instanceof OvhSmsMessage) {
-      throw new InvalidArgumentException('Message must be an instanceof OvhSmsMessage, ' . gettype($message) . 'given');
+      throw new InvalidArgumentException(
+        'message must be an instanceof OvhSmsMessage|string, ' . gettype($message) . 'given',
+      );
+    } else {
+      $message->withReceivers($receivers);
     }
+    // Create OVH request payload
     $content = (object) [
       'charset' => 'UTF-8',
       'class' => 'phoneDisplay',
@@ -72,7 +78,6 @@ class OvhSmsChannel
       'senderForResponse' => true,
       'validityPeriod' => 2880,
     ];
-
     return $this->client->post("/sms/{$this->account}/jobs", $content);
   }
 }
