@@ -26,14 +26,22 @@ class OvhSmsChannel
   protected string $account;
 
   /**
+   * The OvhApi default sender to use
+   * @var string|null
+   */
+  protected ?string $defaultSender;
+
+  /**
    * Create a new OvhSms channel instance.
    * @param OvhApi $client
    * @param string $account
+   * @param string|null $defaultSender
    */
-  public function __construct(OvhApi $client, string $account)
+  public function __construct(OvhApi $client, string $account, ?string $defaultSender = null)
   {
-    $this->account = $account;
     $this->client = $client;
+    $this->account = $account;
+    $this->defaultSender = $defaultSender;
   }
 
   /**
@@ -74,11 +82,19 @@ class OvhSmsChannel
       );
     } else {
       $message->withReceivers($receivers);
+      // Load default sender if message is not using sendForResponse and defaultSender is set
+      if (!$message->sendForResponse && null === $message->sender) {
+        if (null === $this->defaultSender) {
+          throw new InvalidArgumentException('You must specify a valid sender for this message');
+        }
+        $message->withSender($this->defaultSender);
+      }
     }
     // Create OVH request payload
     $content = (object) [
       'charset' => 'UTF-8',
       'class' => 'phoneDisplay',
+      'sender' => $message->sender,
       'coding' => $message->coding,
       'message' => $message->content,
       'noStopClause' => !$message->withStopClause,
