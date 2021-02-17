@@ -26,20 +26,12 @@ class OvhSmsChannel
   protected string $account;
 
   /**
-   * The phone number notifications should be sent from.
-   * @var string
-   */
-  protected string $from;
-
-  /**
    * Create a new OvhSms channel instance.
    * @param OvhApi $client
    * @param string $account
-   * @param string $from
    */
-  public function __construct(OvhApi $client, string $account, string $from)
+  public function __construct(OvhApi $client, string $account)
   {
-    $this->from = $from;
     $this->account = $account;
     $this->client = $client;
   }
@@ -63,7 +55,7 @@ class OvhSmsChannel
     }
     $message = $notification->toOvhSms($notifiable);
     if (is_string($message)) {
-      $message = (new OvhSmsMessage($message))->withFrom($this->from)->withReceivers($receivers);
+      $message = (new OvhSmsMessage($message))->withReceivers($receivers);
     }
     // Ensure message is an instance of OvhSmsMessage
     if (!$message instanceof OvhSmsMessage) {
