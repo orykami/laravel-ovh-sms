@@ -35,11 +35,11 @@ This package require some configuration in `config/services.php`
 return [
   // Add configuration to third party services
   'ovh' => [
-    'app_key' => 'YOUR_APP_KEY_HERE',
-    'app_secret' => 'YOUR_APP_SECRET_HERE',
-    'endpoint' => 'OVH_ENDPOINT_HERE',
-    'consumer_key' => 'YOUR_CONSUMER_KEY_HERE',
-    'sms_account' => 'YOUR_SMS_ACCOUNT_HERE (sms-xxxxxxx-x)',
+    'app_key' => env('OVH_APP_KEY', 'YOUR_APP_KEY_HERE'),
+    'app_secret' => env('OVH_APP_SECRET', 'YOUR_APP_SECRET_HERE'),
+    'endpoint' => env('OVH_ENDPOINT', 'OVH_ENDPOINT_HERE'),
+    'consumer_key' => env('OVH_CONSUMER_KEY', 'YOUR_CONSUMER_KEY_HERE'),
+    'sms_account' => env('OVH_SMS_ACCOUNT', 'sms-xxxxxxx-x)'),
   ],
 ];
 ```
@@ -102,7 +102,7 @@ class User extends Authenticatable
 ```
 
 You're all set to use the new Laravel Notifications system ! :-)
+Be aware that Channel method send will return OVH credits consumed (if needed for quotas/metrics).
 
 ## Licence
-
 MIT

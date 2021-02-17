@@ -2,6 +2,7 @@
 
 namespace Illuminate\Notifications;
 
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\ServiceProvider;
@@ -20,13 +21,15 @@ class OvhSmsChannelServiceProvider extends ServiceProvider
    */
   public function register()
   {
-    // Bind Nexmo Client in Service Container.
+    // Bind OvhApi in Service Container.
     $this->app->singleton(OvhApi::class, function ($app) {
+      /** @var Repository $config */
+      $config = $app->make('config');
       return new OvhApi(
-        $this->app['config']['service.ovh.app_key'],
-        $this->app['config']['service.ovh.app_secret'],
-        $this->app['config']['service.ovh.endpoint'],
-        $this->app['config']['service.ovh.consumer_key'],
+        $config->get('services.ovh.app_key'),
+        $config->get('services.ovh.app_secret'),
+        $config->get('services.ovh.endpoint'),
+        $config->get('services.ovh.consumer_key'),
       );
     });
 
@@ -42,7 +45,6 @@ class OvhSmsChannelServiceProvider extends ServiceProvider
 
   /**
    * Get the services provided by the provider.
-   *
    * @return array
    */
   public function provides()
