@@ -1,0 +1,17 @@
+{
+  "name": "laravel-ovh-sms",
+  "private": true,
+  "version": "1.0.0",
+  "description": "OVH SMS API integration for Laravel 7+.",
+  "scripts": {
+    "linter": "prettier --write '**/*.php'",
+    "linter:check": "prettier --check '**/*.php'"
+  },
+  "author": "orykami",
+  "devDependencies": {
+    "@prettier/plugin-php": "github:prettier/plugin-php",
+    "prettier": "^2.2.1",
+    "yamlinc": "^0.1.9"
+  },
+  "dependencies": {}
+}
