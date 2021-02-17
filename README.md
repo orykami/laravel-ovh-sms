@@ -39,7 +39,8 @@ return [
     'app_secret' => env('OVH_APP_SECRET', 'YOUR_APP_SECRET_HERE'),
     'endpoint' => env('OVH_ENDPOINT', 'OVH_ENDPOINT_HERE'),
     'consumer_key' => env('OVH_CONSUMER_KEY', 'YOUR_CONSUMER_KEY_HERE'),
-    'sms_account' => env('OVH_SMS_ACCOUNT', 'sms-xxxxxxx-x)'),
+    'sms_account' => env('OVH_SMS_ACCOUNT', 'sms-xxxxxxx-x'),
+    'sms_default_sender' => env('OVH_SMS_DEFAULT_SENDER', 'SENDER_NAME')),
   ],
 ];
 ```

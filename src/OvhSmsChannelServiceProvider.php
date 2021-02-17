@@ -38,6 +38,7 @@ class OvhSmsChannelServiceProvider extends ServiceProvider
         return new Channels\OvhSmsChannel(
           $this->app->make(OvhApi::class),
           $this->app['config']['services.ovh.sms_account'],
+          $this->app['config']['services.ovh.sms_default_sender'],
         );
       });
     });

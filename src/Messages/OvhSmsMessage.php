@@ -47,6 +47,12 @@ class OvhSmsMessage
   public string $content;
 
   /**
+   * The message sender.
+   * @var string|null
+   */
+  public ?string $sender = null;
+
+  /**
    * The message priority
    * @var string
    */
@@ -94,12 +100,23 @@ class OvhSmsMessage
 
   /**
    * Set the message content.
-   * @param  string $content
+   * @param string $content
    * @return $this
    */
   public function withContent(string $content): OvhSmsMessage
   {
     $this->content = $content;
+    return $this;
+  }
+
+  /**
+   * Set the message sender.
+   * @param string $sender
+   * @return $this
+   */
+  public function withSender(string $sender): OvhSmsMessage
+  {
+    $this->sender = $sender;
     return $this;
   }
 
