@@ -1,17 +1,14 @@
 # Laravel OVH SMS
 
-This is an unofficial integration of the [php-ovh-sms](https://github.com/ovh/php-ovh-sms) library for Laravel 7+.
+This is an unofficial OVH SMS integration of the [ovh/php-ovh](https://github.com/ovh/php-ovh) library for Laravel 7+.
 
-- Original [PHP OVH SMS library](https://github.com/ovh/php-ovh-sms/blob/master/README.md)
-- Plans & pricing (20 free credits) on the [official site](https://www.ovhtelecom.fr/sms/)
-- Getting credentials on the [OVH Api Explorer](https://api.ovh.com/createToken/index.cgi?GET=/sms&GET=/sms/*&PUT=/sms/*&DELETE=/sms/*&POST=/sms/*)
+- Original [PHP OVH library](https://github.com/ovh/php-ovh/blob/master/README.md)
+- Based on [Nexmo notification channel](https://github.com/laravel/nexmo-notification-channel)
 
 ## Summary
 
 - [Installation](#installation)
-- [Usage](#usage)
-    - [Package API workflow](#package-api-workflow)
-    - [Original API workflow](#original-api-workflow)
+- [Configuration](#configuration)
 - [Using with Laravel Notifications](#using-with-laravel-notifications)
     - [Example notification](#example-notification)
 - [Getting credentials](#getting-credentials)
@@ -27,82 +24,24 @@ composer require orykami/laravel-ovh-sms
 
 After updating composer, add the ServiceProvider to the **providers** array in config/app.php:  
 ```php
-Ori\Ovhsms\ServiceProvider::class,
+Illuminate\Notifications\OvhSmsChannelServiceProvider::class,
 ```
 
-If you want to use the Facade for rapid message sending, you can add this line to your config/app.php in the **aliases** section:  
-```php
-'Ovhsms' => Ori\Ovhsms\Facade::class,
-```
+## Configuration
 
-Then, you should publish the **laravel-ovh-sms** to your config folder with the following command.  
-```bash
-php artisan vendor:publish --provider="Ori\Ovhsms\ServiceProvider"
-```
-
-## Usage
-
-Send a message (using Facade) anywhere in your app:
-```php
-Ovhsms::sendMessage('+33611223344', 'Hello!');
-```
-
-Send a message in a controller using DI:
-```php
-public function myControllerAction(Ori\Ovhsms\OvhSms $client)
-{
-    $client->sendMessage('+33611223344', 'Hello!');
-}
-```
-
-### Package API workflow
-
-This package give you an access to a ready to use **Ovh\Sms\SmsApi** instance with your configured credentials and your default sms account (if present).
-
-It also offer some helpers over the original Api.  
+This package require some configuration in `config/services.php` 
 
 ```php
-$client = app('ovhsms');
-
-// Prepare a new SMS instance and return it.
-$sms = $client->newMessage('the phone number');
-$sms->send('Hi!');
-
-// Same as above but the SMS is marked as a marketing message.
-$sms = $client->newMarketingMessage($phone); // Alias of newMessage($phone, true);
-$sms->send('Hello!');
-
-// Attach many receivers
-$sms = $client->newMessage(['phone1', 'phone2'], ...);
-$sms->send('Hi guys!');
-
-// Send directly the message
-$client->sendMessage($phone, 'Hello!');
-// Or
-$client->sendMarketingMessage($phone, 'Super price this sunday!');
-```
-
-### Original API workflow
-
-If you don't want to use ready-to-use helpers, you can follow the original workflow. Here's an example:  
-```php
-// Retrieve OVH SMS instance
-$ovhsms = app('ovhsms'); // Or Ovhsms::getClient();
-
-// Get available SMS accounts
-$accounts = $ovhsms->getAccounts();
-
-// Set the account you will use
-$ovhsms->setAccount($accounts[0]);
-
-// Create a new message that will allow the recipient to answer (to FR receipients only)
-$sms = $ovh->createMessage(true);
-$sms->addReceiver("+33601020304");
-$sms->setIsMarketing(false);
-
-// Plan to send it in the future
-$sms->setDeliveryDate(new DateTime("2018-02-25 18:40:00"));
-$sms->send("Hello world!");
+return [
+  // Add configuration to third party services
+  'ovh' => [
+    'app_key' => 'YOUR_APP_KEY_HERE',
+    'app_secret' => 'YOUR_APP_SECRET_HERE',
+    'endpoint' => 'OVH_ENDPOINT_HERE',
+    'consumer_key' => 'YOUR_CONSUMER_KEY_HERE',
+    'sms_account' => 'YOUR_SMS_ACCOUNT_HERE (sms-xxxxxxx-x)',
+  ],
+];
 ```
 
 ## Using with Laravel Notifications
@@ -116,8 +55,8 @@ Here's a simple notification example.
 ```php
 namespace App\Notifications;
 
-use Ori\Ovhsms\Notifications\OvhSmsChannel;
-use Ori\Ovhsms\Notifications\OvhSmsMessage;
+use Illuminate\Notifications\Channels\OvhSmsChannel;
+use Illuminate\Notifications\Messages\OvhSmsMessage;
 use Illuminate\Notifications\Notification;
 
 class ExampleNotification extends Notification
@@ -140,7 +79,7 @@ class ExampleNotification extends Notification
 }
 ```
 
-Also, your Notifiable model must implements **routeNotificationForOvh()**.  
+Also, your Notifiable model must implements **routeNotificationForOvhSms()**.  
 
 ```php
 namespace App;
@@ -155,42 +94,14 @@ class User extends Authenticatable
     /**
      * Returns the user's phone number.
      */
-    public function routeNotificationForOvh()
+    public function routeNotificationForOvhSms()
     {
         return $this->phone; // Ex: +33611223344
     }
 }
 ```
 
-Nice, you're ready to use the new Laravel Notifications system.
-
-## Getting credentials
-
-You can get your credentials from the [official API Explorer site](https://api.ovh.com/createToken/index.cgi?GET=/sms&GET=/sms/*&PUT=/sms/*&DELETE=/sms/*&POST=/sms/*) at OVH.  
-
-Once your credentials in hands, you need to put them in **config/laravel-ovh-sms.php**.  
-For convenience, you can put them in your .env file.    
-
-Config keys are:
-- OVHSMS_APP_KEY => your application key
-- OVHSMS_APP_SECRET => your application secret
-- OVHSMS_CONSUMER_KEY => your consumer key
-- OVHSMS_ENDPOINT => your endpoint (defaults to ovh-eu)
-
-Optional keys:  
-- OVHSMS_ACCOUNT => your sms account ID (formatted like "sms-LLXXXXX-X")
-- OVHSMS_USER_LOGIN => your API user ID
-- OVHSMS_SENDER => phone number or alphanumeric sender designation
-
-## Support
-
-Issues related to **ovh/php-ovh-sms** should be posted on [its own repo](https://github.com/ovh/php-ovh-sms).  
-For this Laravel package, feel free to post your issues in the issues section.  
-
-## Contributors
-
-- [MarceauKa](https://github.com/AkibaTech)
-- [bastien09](https://github.com/bastien09)
+You're all set to use the new Laravel Notifications system ! :-)
 
 ## Licence
 
