@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 
 namespace Illuminate\Notifications;
 
@@ -34,7 +34,7 @@ class OvhSmsChannelServiceProvider extends ServiceProvider
     });
 
     Notification::resolved(function (ChannelManager $service) {
-      $service->extend('ovhSms', function ($app) {
+      $service->extend('ovhSms', function () {
         return new Channels\OvhSmsChannel(
           $this->app->make(OvhApi::class),
           $this->app['config']['services.ovh.sms_account'],

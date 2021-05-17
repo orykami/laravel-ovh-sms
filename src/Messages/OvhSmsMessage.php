@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 
 namespace Illuminate\Notifications\Messages;
 
@@ -11,14 +11,9 @@ use InvalidArgumentException;
 class OvhSmsMessage
 {
   /**
-   * High priority
+   * Very low priority
    */
-  const PRIORITY_HIGH = 'high';
-
-  /**
-   * Medium priority
-   */
-  const PRIORITY_MEDIUM = 'medium';
+  const PRIORITY_VERY_LOW = 'veryLow';
 
   /**
    * Low priority
@@ -26,9 +21,14 @@ class OvhSmsMessage
   const PRIORITY_LOW = 'low';
 
   /**
-   * Very low priority
+   * Medium priority
    */
-  const PRIORITY_VERY_LOW = 'veryLow';
+  const PRIORITY_MEDIUM = 'medium';
+
+  /**
+   * High priority
+   */
+  const PRIORITY_HIGH = 'high';
 
   /**
    * Coding 7 bit
@@ -39,6 +39,26 @@ class OvhSmsMessage
    * Coding 8 bit
    */
   const CODING_8BIT = '8bit';
+
+  /**
+   * Priority list
+   * @var array|string[]
+   */
+  public static array $priorityList = [
+    self::PRIORITY_VERY_LOW,
+    self::PRIORITY_LOW,
+    self::PRIORITY_MEDIUM,
+    self::PRIORITY_HIGH,
+  ];
+
+  /**
+   * Coding list
+   * @var array|string[]
+   */
+  public static array $codingList = [
+    self::CODING_7BIT,
+    self::CODING_8BIT,
+  ];
 
   /**
    * The message content.
@@ -127,6 +147,9 @@ class OvhSmsMessage
    */
   public function withPriority(string $priority): OvhSmsMessage
   {
+    if (!in_array($priority, self::$priorityList)) {
+      throw new InvalidArgumentException("Unknown priority value '$priority'");
+    }
     $this->priority = $priority;
     return $this;
   }
@@ -138,6 +161,9 @@ class OvhSmsMessage
    */
   public function withCoding(string $coding): OvhSmsMessage
   {
+    if (!in_array($coding, self::$codingList)) {
+      throw new InvalidArgumentException("Unknown coding value '$coding'");
+    }
     $this->coding = $coding;
     return $this;
   }

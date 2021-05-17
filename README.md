@@ -47,7 +47,7 @@ return [
 
 ## Using with Laravel Notifications
 
-This package can be used as a driver for Laravel Notifications (Laravel >= 5.3).  
+This package can be used as a driver for Laravel Notifications (Laravel >= 7.X).  
 
 ### Example notification
 

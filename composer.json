@@ -1,25 +1,25 @@
 {
-    "name": "orykami/laravel-ovh-sms",
-    "description": "OVH SMS API integration for Laravel 7+.",
-    "keywords": ["laravel", "laravel7", "laravel8", "ovh", "sms", "api"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Orykami",
-            "email": "88.jacquot.benoit@gmail.com"
-        }
-    ],
-    "require": {
-        "php": "^7.4",
-        "illuminate/notifications": "^7.0|^8.0",
-        "illuminate/support": "^8.0",
-        "ovh/ovh": "^v3.0.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Illuminate\\Notifications\\": "src/"
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+  "name": "orykami/laravel-ovh-sms",
+  "description": "OVH SMS API integration for Laravel 7+.",
+  "keywords": ["laravel", "laravel7", "laravel8", "ovh", "sms", "api"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Orykami",
+      "email": "88.jacquot.benoit@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.4|^8.0",
+    "illuminate/notifications": "^7.0|^8.0",
+    "illuminate/support": "^8.0",
+    "ovh/ovh": "^v3.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Illuminate\\Notifications\\": "src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
