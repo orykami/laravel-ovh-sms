@@ -17,6 +17,20 @@ This is an unofficial OVH SMS integration of the [ovh/php-ovh](https://github.co
 
 ## Installation
 
+Currently, this package isn't packaged with packagist (https://packagist.org/). You must add a private repository to your composer.json file in order to use this package. You can add private repository in your composer.json file by adding this section :
+
+```json
+{
+"repositories": [
+    {
+      "name": "orykami/laravel-ovh-sms",
+      "type": "git",
+      "url": "https://github.com/orykami/laravel-ovh-sms"
+    }
+  ]
+}
+```
+
 Require this package with composer:  
 ```bash
 composer require orykami/laravel-ovh-sms
