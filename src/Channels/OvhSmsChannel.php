@@ -1,5 +1,4 @@
 <?php
-
 namespace Illuminate\Notifications\Channels;
 
 use Illuminate\Notifications\Messages\OvhSmsMessage;
@@ -103,6 +102,6 @@ class OvhSmsChannel
       'senderForResponse' => $message->sendForResponse,
       'validityPeriod' => $message->validityPeriod,
     ];
-    return $this->client->post("/sms/{$this->account}/jobs", $content);
+    return $this->client->post("/sms/$this->account/jobs", $content);
   }
 }
