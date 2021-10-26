@@ -55,6 +55,7 @@ return [
     'consumer_key' => env('OVH_CONSUMER_KEY', 'YOUR_CONSUMER_KEY_HERE'),
     'sms_account' => env('OVH_SMS_ACCOUNT', 'sms-xxxxxxx-x'),
     'sms_default_sender' => env('OVH_SMS_DEFAULT_SENDER', 'SENDER_NAME')),
+    'sms_sandbox_mode' => env('OVH_SMS_SANDBOX_MODE', false)),
   ],
 ];
 ```
