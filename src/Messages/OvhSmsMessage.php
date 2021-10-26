@@ -55,10 +55,7 @@ class OvhSmsMessage
    * Coding list
    * @var array|string[]
    */
-  public static array $codingList = [
-    self::CODING_7BIT,
-    self::CODING_8BIT,
-  ];
+  public static array $codingList = [self::CODING_7BIT, self::CODING_8BIT];
 
   /**
    * The message content.

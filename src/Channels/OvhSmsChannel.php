@@ -31,16 +31,24 @@ class OvhSmsChannel
   protected ?string $defaultSender;
 
   /**
+   * The OvhApi run with sandbox mode (sms sending are disabled)
+   * @var bool
+   */
+  protected bool $sandbox;
+
+  /**
    * Create a new OvhSms channel instance.
    * @param OvhApi $client
    * @param string $account
    * @param string|null $defaultSender
+   * @param bool $sandbox
    */
-  public function __construct(OvhApi $client, string $account, ?string $defaultSender = null)
+  public function __construct(OvhApi $client, string $account, ?string $defaultSender = null, bool $sandbox = false)
   {
     $this->client = $client;
     $this->account = $account;
     $this->defaultSender = $defaultSender;
+    $this->sandbox = $sandbox;
   }
 
   /**
@@ -61,8 +69,12 @@ class OvhSmsChannel
   public function send($notifiable, Notification $notification): ?array
   {
     $receivers = $notifiable->routeNotificationFor('ovhSms', $notification);
+    // If sandbox mode, sms sending are disabled
+    if ($this->sandbox) {
+      return null;
+    }
     // If no receivers specified, we don't go further
-    if (null === $receivers || empty($receivers)) {
+    if (empty($receivers)) {
       return null;
     }
     // If notification cannot be cast into OvhSms

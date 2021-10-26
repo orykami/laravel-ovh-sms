@@ -39,6 +39,7 @@ class OvhSmsChannelServiceProvider extends ServiceProvider
           $this->app->make(OvhApi::class),
           $this->app['config']['services.ovh.sms_account'],
           $this->app['config']['services.ovh.sms_default_sender'],
+          $this->app['config']['services.ovh.sms_sandbox_mode'] ?? false,
         );
       });
     });
