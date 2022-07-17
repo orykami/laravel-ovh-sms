@@ -34,7 +34,7 @@ class OvhSmsChannelServiceProvider extends ServiceProvider
     });
 
     Notification::resolved(function (ChannelManager $service) {
-      $service->extend('ovhSms', function () {
+      $service->extend('Illuminate\Notifications\Channels\OvhSmsChannel', function () {
         return new Channels\OvhSmsChannel(
           $this->app->make(OvhApi::class),
           $this->app['config']['services.ovh.sms_account'],
