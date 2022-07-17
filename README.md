@@ -54,8 +54,8 @@ return [
     'endpoint' => env('OVH_ENDPOINT', 'OVH_ENDPOINT_HERE'),
     'consumer_key' => env('OVH_CONSUMER_KEY', 'YOUR_CONSUMER_KEY_HERE'),
     'sms_account' => env('OVH_SMS_ACCOUNT', 'sms-xxxxxxx-x'),
-    'sms_default_sender' => env('OVH_SMS_DEFAULT_SENDER', 'SENDER_NAME')),
-    'sms_sandbox_mode' => env('OVH_SMS_SANDBOX_MODE', false)),
+    'sms_default_sender' => env('OVH_SMS_DEFAULT_SENDER', 'SENDER_NAME'),
+    'sms_sandbox_mode' => env('OVH_SMS_SANDBOX_MODE', false),
   ],
 ];
 ```
@@ -86,9 +86,9 @@ class ExampleNotification extends Notification
     }
 
     /**
-     * Your notification must implements "toOvh()"
+     * Your notification must implements "toOvhSms()"
      */
-    public function toOvh($notifiable)
+    public function toOvhSms($notifiable)
     {
     	return (new OvhSmsMessage('A new invoice was paid! Amount: $9.00'));
     }
