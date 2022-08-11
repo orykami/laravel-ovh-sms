@@ -1,5 +1,5 @@
 {
-  "name": "orykami/laravel-ovh-sms",
+  "name": "mmockelyn/laravel-ovh-sms",
   "description": "OVH SMS API integration for Laravel 7+.",
   "keywords": ["laravel", "laravel7", "laravel8", "laravel9", "ovh", "sms", "api"],
   "license": "MIT",
