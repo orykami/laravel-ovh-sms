@@ -69,10 +69,6 @@ class OvhSmsChannel
   public function send($notifiable, Notification $notification): ?array
   {
     $receivers = $notifiable->routeNotificationFor('ovhSms', $notification);
-    // If sandbox mode, sms sending are disabled
-    if ($this->sandbox) {
-      return null;
-    }
     // If no receivers specified, we don't go further
     if (empty($receivers)) {
       return null;
@@ -100,6 +96,10 @@ class OvhSmsChannel
         }
         $message->withSender($this->defaultSender);
       }
+    }
+    // If sandbox mode, sms sending are disabled
+    if ($this->sandbox) {
+      return null;
     }
     // Create OVH request payload
     $content = (object) [
