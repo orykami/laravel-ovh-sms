@@ -1,0 +1,8 @@
+services:
+
+  api:
+    image: splitfire/docker-php-laravel:release-8.0.6
+    volumes:
+      - .:/var/www
+    environment:
+      - "HOME=/tmp"
