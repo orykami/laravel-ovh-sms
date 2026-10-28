@@ -34,22 +34,16 @@ class OvhSmsChannelServiceProvider extends ServiceProvider
     });
 
     Notification::resolved(function (ChannelManager $service) {
-      $service->extend('Illuminate\Notifications\Channels\OvhSmsChannel', function () {
+      $factory = function ($app) {
         return new Channels\OvhSmsChannel(
-          $this->app->make(OvhApi::class),
-          $this->app['config']['services.ovh.sms_account'],
-          $this->app['config']['services.ovh.sms_default_sender'],
-          $this->app['config']['services.ovh.sms_sandbox_mode'] ?? false,
+          $app->make(OvhApi::class),
+          $app['config']['services.ovh.sms_account'],
+          $app['config']['services.ovh.sms_default_sender'],
+          $app['config']['services.ovh.sms_sandbox_mode'] ?? false,
         );
-      });
-      $service->extend('ovhSms', function () {
-        return new Channels\OvhSmsChannel(
-          $this->app->make(OvhApi::class),
-          $this->app['config']['services.ovh.sms_account'],
-          $this->app['config']['services.ovh.sms_default_sender'],
-          $this->app['config']['services.ovh.sms_sandbox_mode'] ?? false,
-        );
-      });
+      };
+      $service->extend('Illuminate\Notifications\Channels\OvhSmsChannel', $factory);
+      $service->extend('ovhSms', $factory);
     });
   }
 
